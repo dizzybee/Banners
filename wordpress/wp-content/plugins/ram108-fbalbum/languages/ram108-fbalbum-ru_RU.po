@@ -1,0 +1,280 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: [ram108] Facebook Photo Album v0.4.6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2013-11-16 17:01:41+0000\n"
+"Last-Translator: ram108 <ram108@yandex.ru>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: CSL v1.x\n"
+"X-Poedit-Language: Russian\n"
+"X-Poedit-Country: RUSSIA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: includes/fbalbum_button/fbalbum_button.php:28
+#: includes/fbalbum_widget/fbalbum_widget.php:36
+#@ ram108-fbalbum
+msgid "Album URL"
+msgstr "URL альбома"
+
+#: includes/fbalbum_button/fbalbum_button.php:32
+#: includes/fbalbum_widget/fbalbum_widget.php:40
+#@ ram108-fbalbum
+msgid "Number of images to show"
+msgstr "Количество изображений"
+
+#: includes/fbalbum_button/fbalbum_button.php:34
+#@ ram108-fbalbum
+msgid "Leave blank to get all"
+msgstr "Оставьте пустым, чтобы получить все"
+
+#: includes/fbalbum_button/fbalbum_button.php:36
+#@ ram108-fbalbum
+msgid "Display style"
+msgstr "Отображать как"
+
+#: includes/fbalbum_button/fbalbum_button.php:38
+#: includes/fbalbum_button/fbalbum_button.php:98
+#@ ram108-fbalbum
+msgid "Album"
+msgstr "Альбом"
+
+#: includes/fbalbum_button/fbalbum_button.php:39
+#@ ram108-fbalbum
+msgid "Slider"
+msgstr "Слайдер"
+
+#: includes/fbalbum_button/fbalbum_button.php:42
+#@ ram108-fbalbum
+msgid "Options"
+msgstr "Настройки"
+
+#: includes/fbalbum_button/fbalbum_button.php:43
+#@ ram108-fbalbum
+msgid "Add album title and description from Facebook"
+msgstr "Добавить заголовок и описание из Facebook"
+
+#: includes/fbalbum_button/fbalbum_button.php:44
+#: includes/fbalbum_widget/fbalbum_widget.php:45
+#@ ram108-fbalbum
+msgid "Random pick"
+msgstr "Случайное фото"
+
+#: includes/fbalbum_button/fbalbum_button.php:50
+#@ default
+msgid "Insert into post"
+msgstr ""
+
+#: includes/fbalbum_button/fbalbum_button.php:50
+#@ default
+msgid "Cancel"
+msgstr ""
+
+#: includes/fbalbum_button/fbalbum_button.php:56
+#@ ram108-fbalbum
+msgid "Additional options"
+msgstr "Дополнительные настройки"
+
+#: includes/fbalbum_button/fbalbum_button.php:59
+#: includes/plugin_admin/plugin_admin.php:40
+#@ ram108-fbalbum
+msgid "Thumbnail shape"
+msgstr "Форма миниатюры"
+
+#: includes/fbalbum_button/fbalbum_button.php:61
+#@ ram108-fbalbum
+msgid "Default"
+msgstr "По умолчанию"
+
+#: includes/fbalbum_button/fbalbum_button.php:62
+#: includes/plugin_admin/plugin_admin.php:42
+#@ ram108-fbalbum
+msgid "Rectangular"
+msgstr "Прямоугольная"
+
+#: includes/fbalbum_button/fbalbum_button.php:63
+#: includes/plugin_admin/plugin_admin.php:43
+#@ ram108-fbalbum
+msgid "Square"
+msgstr "Квадратная"
+
+#: includes/fbalbum_button/fbalbum_button.php:64
+#: includes/plugin_admin/plugin_admin.php:44
+#@ ram108-fbalbum
+msgid "Circle"
+msgstr "Круглая"
+
+#: includes/fbalbum_button/fbalbum_button.php:67
+#: includes/plugin_admin/plugin_admin.php:37
+#@ ram108-fbalbum
+msgid "Thumbnail size"
+msgstr "Размер миниатюры"
+
+#: includes/fbalbum_button/fbalbum_button.php:69
+#@ ram108-fbalbum
+msgid "Leave blank to use default"
+msgstr "Оставьте пустым, чтобы использовать по умолчанию"
+
+#: includes/fbalbum_widget/fbalbum_widget.php:49
+#@ ram108-fbalbum
+msgid "Add hidden images"
+msgstr "Скрытые изображения"
+
+#: includes/fbalbum_widget/fbalbum_widget.php:53
+#@ ram108-fbalbum
+msgid "Slider style"
+msgstr "Слайдер"
+
+#: includes/fbalbum_button/fbalbum_button.php:30
+#, php-format
+#@ ram108-fbalbum
+msgid "How to find %1$sAlbum URL%2$s"
+msgstr "Что такое %1$sURL альбома%2$s"
+
+#: includes/functions.php:48
+#@ ram108-fbalbum
+msgid "Support the developer with donation"
+msgstr "Поддержите разработчика — внесите пожертвование"
+
+#: includes/functions.php:49
+#@ ram108-fbalbum
+msgid "This will allow you to use registered version of plugin and to hide plugin credits"
+msgstr "Это позволит использовать зарегистрированную копию плагина и скрыть надпись"
+
+#: includes/fbalbum_widget/fbalbum_widget.php:23
+#@ ram108-fbalbum
+msgid "Add Facebook photos to your site. Album or slider style."
+msgstr "Добавляет фотографии из Facebook в виде альбома или слайдера."
+
+#: includes/fbalbum_widget/fbalbum_widget.php:32
+#@ default
+msgid "Title"
+msgstr ""
+
+#: includes/plugin_admin/plugin_admin.php:34
+#@ ram108-fbalbum
+msgid "Default album settings"
+msgstr "Настройки альбома по умолчанию"
+
+#: includes/plugin_admin/plugin_admin.php:53
+#@ ram108-fbalbum
+msgid "Popup image appearing and gallery navigation"
+msgstr "Всплывающие изображения и навигация по альбому"
+
+#: includes/plugin_admin/plugin_admin.php:56
+#@ ram108-fbalbum
+msgid "Show Facebook Like button under each album"
+msgstr "Показывать кнопку Facebook Like после каждого альбома"
+
+#: includes/plugin_admin/plugin_admin.php:49
+#@ ram108-fbalbum
+msgid "Other"
+msgstr "Другие настройки"
+
+#: includes/plugin_admin/plugin_admin.php:52
+#@ ram108-fbalbum
+msgid "Builtin Fancybox"
+msgstr "Встроенный Fancybox"
+
+#: includes/plugin_admin/plugin_admin.php:55
+#@ ram108-fbalbum
+msgid "Facebook Like button"
+msgstr "Кнопка Facebook Like"
+
+#: includes/plugin_admin/plugin_admin.php:85
+#@ ram108-fbalbum
+msgid "Requirements check"
+msgstr "Системные требования"
+
+#: includes/plugin_admin/plugin_admin.php:93
+#@ ram108-fbalbum
+msgid "Plugin usage"
+msgstr "Использование плагина"
+
+#: includes/plugin_admin/plugin_admin.php:96
+#@ ram108-fbalbum
+msgid "Thanks"
+msgstr "Спасибо"
+
+#: includes/plugin_admin/plugin_admin.php:116
+#@ ram108-fbalbum
+msgid "available"
+msgstr "установлено"
+
+#: includes/plugin_admin/plugin_admin.php:116
+#@ ram108-fbalbum
+msgid "should be installed"
+msgstr "необходимо установить"
+
+#: includes/plugin_admin/plugin_admin.php:94
+#, php-format
+#@ ram108-fbalbum
+msgid "Visit plugin %1$shome page%2$s for examples on plugin usage"
+msgstr "Посетите %1$sдомашнюю страницу%2$s плагина, чтобы посмотреть примеры использования"
+
+#: includes/plugin_admin/plugin_admin.php:97
+#, php-format
+#@ ram108-fbalbum
+msgid "Do you like the plugin? %1$sRate it%2$s in Wordpress Plugin Directory or write a review on your blog"
+msgstr "Вам понравился плагин? %1$sОцените его%2$s в каталоге плагинов Wordpress или напишите обзор на своем блоге"
+
+#: includes/plugin_admin/plugin_admin.php:86
+#@ ram108-fbalbum
+msgid "The following extensions should be installed for proper work of plugin"
+msgstr "Для работы плагина рекомендуется установить следующие расширения"
+
+#: includes/functions.php:46
+#@ ram108-fbalbum
+msgid "Register your copy of plugin"
+msgstr "Зарегистрируйте свою копию плагина"
+
+#: includes/plugin_admin/plugin_admin.php:141
+#@ ram108-fbalbum
+msgid "Settings"
+msgstr "Настройки"
+
+#. translators: plugin header field 'Description'
+#: plugin.php:0
+#@ ram108-fbalbum
+msgid "Easy way to add Facebook photo albums to your site. Includes widget, shortcode and Facebook slider."
+msgstr "Лёгкий способ добавить фотографии из Facebook на свой сайт. Включает виджет, макрос и слайдер Facebook."
+
+#. translators: plugin header field 'Name'
+#: plugin.php:0
+#@ ram108-fbalbum
+msgid "[ram108] Facebook Photo Album"
+msgstr ""
+
+#. translators: plugin header field 'PluginURI'
+#: plugin.php:0
+#@ ram108-fbalbum
+msgid "http://www.ram108.ru/plugins/ram108-fbalbum"
+msgstr ""
+
+#. translators: plugin header field 'Author'
+#: plugin.php:0
+#@ ram108-fbalbum
+msgid "ram108"
+msgstr ""
+
+#. translators: plugin header field 'AuthorURI'
+#: plugin.php:0
+#@ ram108-fbalbum
+msgid "http://profiles.wordpress.org/ram108"
+msgstr ""
+
+#. translators: plugin header field 'Version'
+#: plugin.php:0
+#@ ram108-fbalbum
+msgid "0.4.6"
+msgstr ""
+

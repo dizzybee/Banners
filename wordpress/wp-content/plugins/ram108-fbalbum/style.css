@@ -1,0 +1,203 @@
+/*
+===========================
+FACEBOOK PHOTO ALBUM 
+===========================
+*/
+
+/* ALBUM */
+
+.ram108_fbalbum, 
+.ram108_fbwrapper 
+{
+	position: relative;
+	overflow: hidden;
+	clear: both;
+	display: block;
+}
+
+.ram108_fbimage
+{
+	background-color: #FFF;
+	margin: 10px 10px 0 0;
+	border: 1px solid #DDD;
+	float: left;
+	padding: 7px;
+}
+
+.ram108_fbimage:last-child
+{
+	clear: right;
+}
+
+/* FBTHUMB */
+
+.ram108_fbthumb 
+{
+	background-position: 50% 25%;
+	background-size: cover !important;
+	background-repeat: no-repeat;
+	overflow: hidden;
+}
+
+.ram108_fbthumb *
+{
+	display: none;
+}
+
+/* CIRCLE */
+
+.ram108_fbcircle
+{
+	margin: 5px 5px 0 0;
+}
+
+.ram108_fbcircle, 
+.ram108_fbcircle .ram108_fbthumb
+{
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+}
+
+/* HOVER EFFECTS */
+
+a .ram108_fbthumb
+{
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+
+a .ram108_fbthumb:hover 
+{
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+	filter: alpha(opacity=60);
+	opacity: 0.6;
+}
+
+/* FBLINK */
+
+.ram108_fblink 
+{
+	font-size: 11px;
+	font-family: "lucinda grande", sans-serif;
+	margin-bottom: 15px !important;
+}
+
+.ram108_fblink a, 
+.ram108_fblink a:hover
+{
+	text-decoration: none;
+	color: #3B5998 !important;
+	border: 0;
+}
+
+.ram108_fblink, 
+.ram108_fblink span {
+	display: none;
+}
+
+/* OTHER */
+
+.ram108_fbhidden
+{
+	display: none;
+}
+
+.ram108_fbalbum_error
+{
+	font-size: 80%;
+}
+
+.ram108_fbalbum
+{
+	margin: 5px auto;
+}
+
+.ram108_fbwrapper
+{
+	margin-bottom: 8px;
+}
+
+/*
+===========================
+WIDGET 
+===========================
+*/
+
+.ram108_fbwidget .ram108_fbimage 
+{
+	margin: 3px 3px 0 0;
+	padding: 3px;
+}
+
+.ram108_fbwidget .ram108_fblink 
+{
+	font-size: 8pt;
+}
+
+.ram108_fbwidget .ram108_fbtitle, 
+.ram108_fbwidget .ram108_fbdesc
+{
+	display: none;
+}
+
+/* FIX FOR .widget-area */
+
+.widget-area .ram108_fblink 
+{
+	font-size: 8pt !important;
+}
+
+/*
+===========================
+SLIDER
+===========================
+*/
+
+.ram108_fbwidget .ram108_fbslider .ram108_fblink {
+	text-align: center;
+}
+
+.ram108_fbwidget .rslides_container ul.rslides_tabs,
+.ram108_fbwidget .rslides_container ul.rslides_tabs li,
+.widget-area .rslides_container ul.rslides_tabs,
+.widget-area .rslides_container ul.rslides_tabs li {
+	line-height: 12px;
+}
+
+.ram108_fbwidget .rslides .caption,
+.widget-area .rslides .caption {
+	font-size: 1.5vmin;
+	line-height: 1.2;
+	padding: 6px 12px;
+	max-height: 30%;
+	display: none;
+}
+
+.ram108_fbwidget .ram108_fbslider .rslides_nav,
+.widget-area .ram108_fbslider .rslides_nav {
+	margin: 0;
+	background: none;
+	top: 0;
+	bottom: 0;
+	width: 30%;
+	height: 80%;
+}
+
+.ram108_fbwidget .rslides_container ul.rslides_tabs,
+.widget-area .rslides_container ul.rslides_tabs {
+	margin: 3px 0;
+}
+
+.ram108_fbwidget .rslides_container ul.rslides_tabs li,
+.widget-area .rslides_container ul.rslides_tabs li {
+	margin-right: 4px;
+}
+
+.ram108_fbwidget .rslides_container ul.rslides_tabs a,
+.widget-area .rslides_container ul.rslides_tabs a {
+	width: 7px;
+	height: 7px;
+}
