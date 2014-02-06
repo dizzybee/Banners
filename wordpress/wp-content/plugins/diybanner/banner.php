@@ -596,11 +596,11 @@ var paperSizes = [
 							<br/><input id="printConstruction" type="checkbox" name="printConstruction" value="Yes" checked>Construction Page
 							<a href="#" data-reveal-id="myModal" data-reveal>view</a>
 							<div id="myModal" class="reveal-modal" data-reveal>
-					<div id="infoSheet">
-						<canvas id="infoCanvas" class="banner-size"></canvas>
-						<canvas id="infoDimensions" width="800px"></canvas>
-						<div id="infoSteps"></div>
-					</div>
+								<div id="infoSheet">
+									<canvas id="infoCanvas" class="banner-size"></canvas>
+									<canvas id="infoDimensions" width="800px"></canvas>
+									<div id="infoSteps"></div>
+								</div>
 							  <a class="close-reveal-modal">&#215;</a>
 							</div>
 							<br/><input type="submit" name="makepage" value="Print"/>
@@ -671,7 +671,7 @@ var paperSizes = [
 
 									while (false !== ($file = readdir($dir_handle))) {
 										if ($file != '.' && $file != '..' && $file != 'Thumbs.db') {
-											echo "<li class='logo' title='Banner Logo'> <img src='" . $url . $file . "'alt='Banner-logo'/></li>";
+											echo "<li class='logo' title='Banner Logo'> <img id='".$file."' src='" . $url . $file . "'alt='Banner-logo'/></li>";
 										}
 									}
 									closedir($dir_handle);

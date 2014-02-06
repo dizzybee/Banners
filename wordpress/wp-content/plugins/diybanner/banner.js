@@ -575,7 +575,7 @@ function cloneCanvas(oldCanvas) {
     function addImage (logo) {
         
       this_id = $("#images-logos div").length;
-      $("#images-logos").append('<div id="image_' + this_id + '" class="logo"></div>');
+      $("#images-logos").append('<div id="image_' + this_id + '" filename="'+logo+'" class="logo"></div>');
       addImagetoCanvas (logo, this_id);
 
       $("#images-logos div").draggable();
@@ -601,16 +601,16 @@ function cloneCanvas(oldCanvas) {
         });
       
       $("#images-logos div.logo").resize (function() {
-          //$(this).css('width',parseInt($(this).css('width'))*val);
-          //$(this).css('height',parseInt($(this).css('height'))*val);
-          //$(this).find('canvas').css('width',parseInt($(this).css('width')));
-          //$(this).find('canvas').css('height',parseInt($(this).css('height')));
-          
-      var canvas = document.getElementById($(this).find('canvas').attr('id'));
-      //canvas.setAttribute('width', parseInt($(this).css('width')));
-      canvas.width = parseInt($(this).css('width'));
-      canvas.height = parseInt($(this).css('height'));
-
+	      var canvas = document.getElementById($(this).find('canvas').attr('id'));
+	      var imgfname = $(this).attr('filename');
+	      var img = new Image();
+	      img.src = imgfname;
+	      context = canvas.getContext('2d');
+	      canvas.width = parseInt($(this).css('width'));
+	      canvas.height=parseInt($(this).css('height'));
+	      canvas.style.width = $(this).css('width');
+	      canvas.style.height=$(this).css('height');
+	      context.drawImage(img,0,0,parseInt($(this).css('width')),parseInt($(this).css('height')));
       });
     }
     
