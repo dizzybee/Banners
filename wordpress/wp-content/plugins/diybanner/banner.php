@@ -441,6 +441,7 @@ var paperSizes = [
 	</div>
 	-->
 <form name="PrintLetters" method="POST" action="<?php echo plugins_url('diybanner'); ?>/one-letter.php" target="_blank" onsubmit="printCanvas('images-logos');submit();">
+	
 
 	<div id="generalsettings">
 

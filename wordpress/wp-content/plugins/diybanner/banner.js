@@ -64,23 +64,38 @@
     {  
     
       if ($('#printImages').is(':checked')) {
+      	      var portraitwidth=216;
+      	      var portraitheight = 1200;
 	      var windowContent = '<!DOCTYPE html>';
-	      windowContent += '<html>'
-	      windowContent += '<head><title>Print canvas</title><script>img {page-break-after:always;}</script></head>';
-	      windowContent += '<body>'
+	      windowContent += '<html>';
+	      windowContent += '<head>';
+	      windowContent += '<style>div{float:left;position:relative;page-break-before: always}';
+	      windowContent += '.rotate{float:left;position:relative;transform:rotateZ(90deg);-ms-transform:rotateZ(90deg); /* IE 9 */-webkit-transform:rotateZ(90deg); /* Safari and Chrome */}</style>';
+	      windowContent += '<title>Print canvas</title><script>img {page-break-after:always;}</script></head>';
+	      windowContent += '<body>';
 	      
+	      var prevheight = 0;
 	      $("#images-logos canvas").each(function() {
 	        this_id = $(this).attr('id');
+	        var dataUrl = $(this).parent().attr('filename');
 	        if ($(this).width()*imageprintscale > portraitwidth) {
+	        	var divspacer = prevheight;
+	        	var divheight = parseInt($(this).height()*imageprintscale/upscale) + divspacer;
+	        	windowContent += '<div class="jrotate"  style="height:' + divheight + 'px;" ><img style="top:'+divspacer+'px;" class="rotate" height="' + $(this).height()*imageprintscale/upscale + 'px" src="' + dataUrl + '" /></div>';
 	          alert($(this).width()*imageprintscale);
-	          console.log ('need to rotate image')
+	        //prevheight = 0;
 	        }
-	        var dataUrl = document.getElementById(this_id).toDataURL(); //attempt to save base64 string to server using this var  
-	        windowContent += '<img height="' + $(this).height()*imageprintscale/upscale + '" src="' + dataUrl + '">';
+	        else {
+	        	windowContent += '<div><img height="' + $(this).height()*imageprintscale/upscale + 'px" src="' + dataUrl + '" /></div>';
+	        //prevheight = parseInt($(this).height()*imageprintscale/upscale);
+
+	        }
+	       // var dataUrl = document.getElementById(this_id).toDataURL(); //attempt to save base64 string to server using this var  
 	      });
+	      
 	      windowContent += '</body>';
 	      windowContent += '</html>';
-	      var printWin = window.open('','','width=340,height=260');
+	      var printWin = window.open('','','width=600,height=800');
 	      printWin.document.open();
 	      printWin.document.write(windowContent);
 	      printWin.document.close();
@@ -591,7 +606,7 @@ function cloneCanvas(oldCanvas) {
       
       /* Dont remove the div as we need to be able to count to use for id */
       $("#images-logos canvas").dblclick (function() {
-        $(this).remove();
+        $(this).parent().remove();
       });
         $("#images-logos .logo").mouseover (function () {
           $(this).find('.ui-icon').css('display','inline');
@@ -1040,12 +1055,21 @@ function cloneCanvas(oldCanvas) {
         }
         
       function changeTextSize (widget) {
+      	console.log('oversize >> '+overscale);
+      	
+      	if (!overscale) {
+      		scaleval = 1-upscale;
+      	}
+      	else {
+      		scaleval = upscale;
+      	}
+      	
         if ($("#global-fontsize").is(':checked')) {
-          $("#"+widget).css('font-size', $("#global-fontsize-slider").slider("value")*upscale);
+          $("#"+widget).css('font-size', $("#global-fontsize-slider").slider("value")*scaleval);
           changeFontsizeGlobal ($("#global-fontsize-slider").slider('value'));
         }
         else {
-          $("#"+widget).css('font-size', $(".fontsize[ref="+widget+"]").slider("value")*upscale);
+          $("#"+widget).css('font-size', $(".fontsize[ref="+widget+"]").slider("value")*scaleval);
           changeFontsizeVariable (widget, $(".fontsize[ref="+widget+"]").slider("value"));
         }
         if ($(".centered[value="+$("#"+widget).attr('id')+"]").is(':checked')) {
@@ -1195,7 +1219,6 @@ function cloneCanvas(oldCanvas) {
             $('#customsize').slideDown('fast', function() {});
             
             if (($( "#width-slider" ).slider("value") < 1000) || ($( "#height-slider" ).slider("value") < 1000)) {
-            alert($( "#width-slider" ).slider("value"));
               upscale = getScale($( "#width-slider" ).slider("value"),$( "#height-slider" ).slider("value"));
             }
             else {
