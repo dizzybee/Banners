@@ -42,7 +42,7 @@ $_SESSION['paperSizes'] = array( 0 => array( "Measure"=>'Metric', "Value"=>'11',
 var testarr = [{key: 'key1', value: 'value1'}, {key: 'key2', value: 'value2'}];
 var paperSizes = [
 	{'Name': '3m (w) x 1.8 (h)', "Measure":'Metric', "Value":'3x1.8', "Type":'runthrough','Width':3000,'Height':1800,'Description':'Great choice for 1-2 people'},
-	{'Name': '4m (w) x 1.3 (h)', "Measure":'Metric', "Value":'4x2.3', "Type":'runthrough','Width':4000,'Height':2300,'Description':'Great choice for 1-2 people'},
+	{'Name': '4m (w) x 2.3 (h)', "Measure":'Metric', "Value":'4x2.3', "Type":'runthrough','Width':4000,'Height':2300,'Description':'Great choice for 1-2 people'},
 	{'Name': '6m (w) x 2.8 (h)', "Measure":'Metric', "Value":'6x2.8', "Type":'runthrough','Width':6000,'Height':2800,'Description':'Great choice for more than 2 people or a small team'},
 	{'Name': 'A3 Portrait', "Measure":'Metric', "Value":'0.42x0.3', "Type":'handheld','Width':420,'Height':300,'Description':''},
 	{'Name': 'A3 Landscape', "Measure":'Metric', "Value":'0.3x0.42', "Type":'handheld','Width':300,'Height':420,'Description':''},
@@ -69,7 +69,6 @@ var paperSizes = [
 		$('#backgroundsettings').prepend(paper);
 		$("input[name=bannersize]").change(function() {
 			setBannerSize($("input[name=bannersize]:checked").val());
-			$(this).parentsUntil('#BannerSize').parent().find('.value').text($("input[name=bannersize]:checked").val());
 		});
 		$('input[name=bannersize]').first().attr('checked', true);
 		$("input[name=bannersize]").parentsUntil('#BannerSize').parent().find('.value').text($("input[name=bannersize]:checked").val());
@@ -247,9 +246,9 @@ var paperSizes = [
 	$(this).addClass("selected");
 	switch ($("#textmaxsize li.selected img").attr("value")) {
 		case "onepage":
-		adjustTextSizeSliders(maxfontsize);
-		txtval = '1';
-		break;
+			adjustTextSizeSliders(maxfontsize);
+			txtval = '1';
+			break;
 		case "twopage":
 		adjustTextSizeSliders(maxfontsize * 1.5);
 		txtval = '2';
@@ -266,46 +265,32 @@ var paperSizes = [
 
 	$("#width-slider").slider({
 	range : "min",
-	max : (6000 / ratio), // 6m
-	min : (200 / ratio),
+	max : (maxcanvaswidth), // 6m
+	min : (20),
 	step : 10,
-	value : (1800 / ratio),
+	value : (maxcanvaswidth/3),
 	slide : function(event, ui) {
-	setBackgroundWidth(ui.value);
+	//setBackgroundWidth(ui.value);
 	},
 	change : function(event, ui) {
-	var currentscale = upscale;
-	setBackgroundWidth(ui.value);
-	if (ui.value < 1000 / ratio) {
-	alert("need to upscale");
-	upscale = 4;
-	} else {
-	upscale = 1;
-	}
-
-	performScale(100);
+		setBackgroundSize(ui.value,0);
+	
+		//performScale(getScale(0,0));
 	}
 	});
 
 	$("#height-slider").slider({
 	range : "min",
-	max : (3000 / ratio), // 3 meters
-	min : (200 / ratio),
-	value : (1800 / ratio),
+	max : (maxcanvasheight), // 3 meters
+	min : (20),
+	value : (maxcanvasheight/3),
 	step : 10,
 	slide : function(event, ui) {
-	setBackgroundHeight(ui.value);
+	//setBackgroundHeight(ui.value);
 	},
 	change : function(event, ui) {
-	var currentscale = upscale;
-	setBackgroundHeight(ui.value);
-	if (ui.value < 1000 / ratio) {
-	alert("need to upscale");
-	upscale = 4;
-	} else {
-	upscale = 1;
-	}
-	performScale(100);
+	setBackgroundSize(0,ui.value);
+	//performScale(getScale(0,0));
 	}
 	});
 
@@ -493,7 +478,6 @@ var paperSizes = [
 						<div class="current"><span class="value"></span><span class="edit">Edit</span></div>
 						<div class="options">
 							<div id="backgroundsettings">
-								<h3>Banner Sizing</h3>
 									<h4>Custom Size</h4>
 									<input type="radio" class="runthrough"  name="bannersize" value="custom">
 									Custom Size

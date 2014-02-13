@@ -20,7 +20,8 @@
     var imagescale = 1;
     var imageprintscale = 3;
     var maximagewidth = 190;
-    var maximageheight = 300;
+    maximagewidth = 50;
+    var maximageheight = 50;
     /* font sizing variables */
     var a4portraitwidth = 210;
     var a4portraitheight = 297;
@@ -38,11 +39,15 @@
     var fontratio = 5;
     
     /* banner sizing variables */
+   var maxcanvaswidth = 800;
+   var maxcanvasheight = 400;
+   var measurement = "mm";
+   var slider_variance = 0;
     var upscale;
-    var maxActualWidth = 6000;
+    var maxActualWidth = 600;
     var maxActualHeight = maxActualWidth/2;
-    var maxScreenHeight = 360;
-    var maxScreenWidth = 720;
+    //var maxScreenHeight = 360;
+    //var maxScreenWidth = 720;
     
     var overscale;
     overscale = false;
@@ -127,7 +132,7 @@ function cloneCanvas(oldCanvas) {
 }
 
     function convertToMM (val) {
-      return (Math.round(val * ratio/100)*100);
+      return (Math.round(val * ratio/100));
     }
 
     function clearCanvas(canvasid) {
@@ -539,8 +544,28 @@ function cloneCanvas(oldCanvas) {
 
     }
     
-    function addImagetoCanvas (logo, this_id) {
+    function setImageSettings(imgwidth, imgheight, actualwidth, actualheight, this_id) {
+    	console.log('this id >> '+this_id);
+    	var canvasID = $('#'+this_id).find('canvas').attr('id');
+    	console.log ('canvas id >>'+canvasID);
+    	var canvas = document.getElementById(canvasID);
+      	canvas.height = imgheight;
+      	canvas.width = imgwidth;
+      	$('#'+this_id).width(imgwidth);
+      	$('#'+this_id).height(imgheight);
+	$('#'+this_id).attr('actual-width',parseInt(actualwidth));
+	$('#'+this_id).attr('actual-height',parseInt(actualheight));
+      $(this_id).css('width',parseInt(imgwidth)+'px');
+      $(this_id).css('height',parseInt(imgheight)+'px');
+      $('#'+canvasID).css('width',parseInt(imgwidth)+'px');
+      $('#'+canvasID).css('height',parseInt(imgheight)+'px');
+    	
+    }
     
+    function addImagetoCanvas (logo, this_id) {
+ 	var upscale=1;   
+ 	var imgwidth, imgheight, scaledown;
+ 	var bg_scale = $('#background').attr('scale-ratio');
       var canvasDiv = document.getElementById('image_'+this_id);
       canvas = document.createElement('canvas');
       canvas.setAttribute('id', 'canvas_'+this_id);
@@ -549,41 +574,91 @@ function cloneCanvas(oldCanvas) {
       var context = canvas.getContext("2d");
       var imageObj = new Image();
       imageObj.src = logo;
-      imageObj.onload = function() {
-        context.drawImage(imageObj, 0, 0, this.width*upscale, this.height*upscale);
-      };
-     
-      var scaledown = 1;
-      if (parseInt(imageObj.width) >= parseInt(imageObj.height)) {
-        if (parseInt(imageObj.width) > (maximagewidth/imagescale)) {
-          scaledown = (maximagewidth/imagescale)/parseInt(imageObj.width);
-        }
-      }
-      else {
-        if (parseInt(imageObj.height) > (maximageheight/imagescale)) {
-          scaledown = (maximagewidth/imagescale)/parseInt(imageObj.height);
-        }
-      }
-      $('#canvas_'+this_id).width(parseInt(imageObj.width)*scaledown*upscale);
-      $('#canvas_'+this_id).height(parseInt(imageObj.height)*scaledown*upscale);
-      $('#image_'+this_id).width(parseInt(imageObj.width)*scaledown*upscale);
-      $('#image_'+this_id).height(parseInt(imageObj.height)*scaledown*upscale);
-      canvas.width = imageObj.width*upscale;
-      canvas.height = imageObj.height*upscale;
+	if (imageObj.width < imageObj.height) {
+	      $('#image_'+this_id).resizable ({aspectRatio: true, autohide: true, maxHeight: maximageheight});
+	      if (imageObj.height >= maximageheight) {
+	      	scaledown = maximageheight/imageObj.height;
+	      	console.log ('height greater than max height.  Scaledown >> '+scaledown);
+	      	imgheight = maximageheight;
+	      	imgwidth = imageObj.width*scaledown;
+      		}
+      	      else {
+      	      	console.log('here');
+      	      	imgwidth = imageObj.width;
+      		imgheight = imageObj.height;
+
+      	      	}
+	}
+	else {
+	      $('#image_'+this_id).resizable ({aspectRatio: true, autohide: true, maxWidth: maximagewidth});
+	      if (imageObj.width >= maximagewidth) {
+	      	console.log ('width greater than max width');
+	      	scaledown = maximagewidth/imageObj.width;
+	      	console.log ('width greater than max width.  Scaledown >> '+scaledown);
+	      	imgwidth = maximagewidth;
+	      	imgheight = (imageObj.height*scaledown);
+      		}
+      	      else {
+      		imgwidth = imageObj.width;
+      		imgheight = imageObj.height;
+      		}
+	}
+	
+      	imageObj.onload = function() {
+        	context.drawImage(imageObj, 0, 0, imgwidth, imgheight);
+      	};
+      	
+      	setImageSettings (imgwidth, imgheight, imageObj.width, imageObj.height, 'image_'+this_id);
     }
       
-      function scaleImageCanvas (val) {
+      function scaleImage (widget) {
+      	var bg_scale = $('#background').attr('scale-ratio')/10;
+      	//var current_width = parseInt($(widget).css('width'));
+      	//var current_height = parseInt($(widget).css('height'));
+      	var current_width = $(widget).attr('actual-width');
+      	var current_height = $(widget).attr('actual-height');
+      	var imgwidth = current_width * bg_scale;
+      	var imgheight = current_height * bg_scale;
+      	var actualwidth = imgwidth;
+      	var actualheight = imgheight;
+      	
+      	var this_id = $(widget).attr('id');
+      	console.log('this id >> '+this_id);
+      	setImageSettings (imgwidth, imgheight, current_width, current_height, this_id);
+      	
+	      var canvas = document.getElementById($('#'+this_id).find('canvas').attr('id'));
+      	console.log('1');
+       var context = canvas.getContext("2d");
+      var imageObj = new Image();
+      imageObj.src = $(widget).attr('filename');
+      	imageObj.onload = function() {
+        	context.drawImage(imageObj, 0, 0, imgwidth, imgheight);
+      	};
+      	console.log('12');
+     	
+      	/*
+      	var new_width = current_width * bg_scale;
+      	var new_height = current_height * bg_scale;
+	$(widget).css('width',new_width);
+	$(widget).css('height',new_height);
+	$(widget).find('canvas').css('width',new_width);
+	$(widget).find('canvas').css('height',new_height);
+	*/
+	
+	//$(widget).attr('actual-width',parseInt($(widget).css('width'))*(bg_scale/10));
+	//$(widget).attr('actual-height',parseInt($(widget).css('height'))*(bg_scale/10));
+	if ($('#image_'+this_id).width() < $('#image_'+this_id).height()) {
+	      $('#image_'+this_id).resizable ({aspectRatio: true, autohide: true, maxHeight: maximageheight/bg_scale});
+	}
+	else {
+	      $('#image_'+this_id).resizable ({aspectRatio: true, autohide: true, maxWidth: maximagewidth/bg_scale});
+	}
+      	
+      }
+      function scaleImageCanvas (scale) {
+      	console.log ('scale image >> '+scale);
         $("#images-logos div.logo").each(function(){
-          $(this).css('width',parseInt($(this).css('width'))*val);
-          $(this).css('height',parseInt($(this).css('height'))*val);
-          $(this).find('canvas').css('width',parseInt($(this).find('canvas').css('width'))*val);
-          $(this).find('canvas').css('height',parseInt($(this).find('canvas').css('height'))*val);
-      if ($(this).width() < $(this).height()) {
-          $(this).resizable ({aspectRatio: true, autohide: true, maxHeight: maximageheight/imagescale*upscale});
-      }
-      else {
-          $(this).resizable ({aspectRatio: true, autohide: true, maxWidth: maximagewidth/imagescale*upscale});
-      }
+        	scaleImage($(this));
         });
       }
     
@@ -594,13 +669,13 @@ function cloneCanvas(oldCanvas) {
       addImagetoCanvas (logo, this_id);
 
       $("#images-logos div").draggable();
-      if ($('#image_'+this_id).width() >= $('#image_'+this_id).height()) {
+/*      if ($('#image_'+this_id).width() >= $('#image_'+this_id).height()) {
           $('#image_'+this_id).resizable ({aspectRatio: true, autohide: true, maxHeight: maximageheight/imagescale*upscale});
       }
       else {
           $('#image_'+this_id).resizable ({aspectRatio: true, autohide: true, maxWidth: maximagewidth/imagescale*upscale});
       }
-      
+ */     
             //$(this).find('canvas').width($(this).width()*upscale);
             //$(this).find('canvas').height($(this).height()*upscale);
       
@@ -616,6 +691,8 @@ function cloneCanvas(oldCanvas) {
         });
       
       $("#images-logos div.logo").resize (function() {
+      	console.log('resizing>>');
+      	var bg_scale = $('#background').attr('scale-ratio');
 	      var canvas = document.getElementById($(this).find('canvas').attr('id'));
 	      var imgfname = $(this).attr('filename');
 	      var img = new Image();
@@ -626,6 +703,8 @@ function cloneCanvas(oldCanvas) {
 	      canvas.style.width = $(this).css('width');
 	      canvas.style.height=$(this).css('height');
 	      context.drawImage(img,0,0,parseInt($(this).css('width')),parseInt($(this).css('height')));
+      //$(this).attr('actual-width',parseInt($(this).css('width'))*(bg_scale/10));
+      //$(this).attr('actual-height',parseInt($(this).css('height'))*(bg_scale/10));
       });
     }
     
@@ -848,14 +927,16 @@ function cloneCanvas(oldCanvas) {
      	$(this).css("border","1px solid red");
      });
      
-     function setBackgroundWidth (newwidth) {
+     function setBackgroundWidth (width,scale) {
+     	var newwidth = width*scale;
        var widthm = newwidth;
        var containerwidth = $("#container").width();
        var currentbackgroundleft = parseInt($("#background").css('left'));
        var newbackgroundleft = Math.round((containerwidth - newwidth)/2);
        var leftdiff =  (newbackgroundleft-currentbackgroundleft)/containerwidth;
-       $("#width-amount").val(Math.round(widthm*1000) + " mm");
-       $("#background, .banner-size, #gridlines").width(widthm);
+       $("#width-amount").val(Math.round(width) + slider_variance + " mm");
+       $("#background, .banner-size, #gridlines").width(newwidth);
+       $("#background").attr('physical-width', width+ slider_variance);
        $("#background, #gridlines").css('left', 0);
        setBackground('background', $("#background-fillsettings li.selected canvas").attr("value"));
        
@@ -877,12 +958,13 @@ function cloneCanvas(oldCanvas) {
        });
      }
      
-     function setBackgroundHeight (val) {
-       var heightm = val;
+     function setBackgroundHeight (height,scale) {
+       var newheight = height*scale;
        var currentbackgroundheight = $("#background").height();
-       topdiff = (val-currentbackgroundheight)/$("#container").height();
-       $("#height-amount").val(Math.round(heightm*1000) + " mm");
-       $("#background, .banner-size, #gridlines").height(heightm);
+       topdiff = (newheight-currentbackgroundheight)/$("#container").height();
+       $("#height-amount").val(Math.round(height) + slider_variance + " mm");
+       $("#background, .banner-size, #gridlines").height(newheight);
+       $("#background").attr('physical-height', height+ slider_variance);
        $(".text-display").each(function() {
          positionText ($(this), null, 0, topdiff); 
        });
@@ -932,7 +1014,7 @@ function cloneCanvas(oldCanvas) {
         addTextBox (3, "50 Games");
         makeUppercase();
         
-        buildGrids(10*(10*upscale), 100*(10*upscale),'gridlines');
+        //buildGrids(10*(10*upscale), 100*(10*upscale),'gridlines');
         
 
         //addJumper();     
@@ -1055,21 +1137,17 @@ function cloneCanvas(oldCanvas) {
         }
         
       function changeTextSize (widget) {
-      	console.log('oversize >> '+overscale);
-      	
-      	if (!overscale) {
-      		scaleval = 1-upscale;
-      	}
-      	else {
-      		scaleval = upscale;
-      	}
-      	
+      
+        var bg_scale = $('#background').attr('scale-ratio');
+        
         if ($("#global-fontsize").is(':checked')) {
-          $("#"+widget).css('font-size', $("#global-fontsize-slider").slider("value")*scaleval);
+          $("#"+widget).css('font-size', $("#global-fontsize-slider").slider("value")*(bg_scale/10));
+          $("#"+widget).attr('actual-font-size', $("#global-fontsize-slider").slider("value"));
           changeFontsizeGlobal ($("#global-fontsize-slider").slider('value'));
         }
         else {
-          $("#"+widget).css('font-size', $(".fontsize[ref="+widget+"]").slider("value")*scaleval);
+          $("#"+widget).css('font-size', $(".fontsize[ref="+widget+"]").slider("value")*(bg_scale/10));
+          $("#"+widget).attr('actual-font-size', $(".fontsize[ref="+widget+"]").slider("value"));
           changeFontsizeVariable (widget, $(".fontsize[ref="+widget+"]").slider("value"));
         }
         if ($(".centered[value="+$("#"+widget).attr('id')+"]").is(':checked')) {
@@ -1104,7 +1182,7 @@ function cloneCanvas(oldCanvas) {
           
       }       
       
-      function performScale(currentscale) {
+      function performScale(scale) {
       /*
         if (upscale == 1) {
           $(".fontsize").slider("option","min", 10);
@@ -1117,24 +1195,48 @@ function cloneCanvas(oldCanvas) {
           }
         }
         else {*/
-          $(".fontsize").slider("option","min",1);
-          if (currentscale != upscale) {
-            scaleImageCanvas(upscale);
+          //$(".fontsize").slider("option","min",1);
+          //if (currentscale != upscale) {
+            scaleImageCanvas(scale);
             $(".fontsize").each(function(){
               var currval = $(this).slider("value");
-              $(this).slider("option","value", currval/upscale);
+              $(this).slider("option","value", currval);
             });
-          }
+          //}
  /*       }*/
         
-        changeTextSizes();   
+        changeTextSizes(scale);   
         
       }
       
       function myRound (val) {
       	return (Number(val.toString().match(/^\d+(?:\.\d{0,2})?/)));
       }
-      function getScale(width, height) {
+      
+      function getScale (width, height) {
+      	
+      	var scale;
+      	
+      	if (width == 0 || height == 0) {
+      		width = $("#background").width();
+      		height = $("#background").height();
+      	}
+      	var ratio = width/height;
+      	
+      	var maxratio = maxcanvaswidth/maxcanvasheight;
+      	
+      	if (ratio >= maxratio) {
+      		scale = maxcanvaswidth/width;
+      	
+      	}
+      	else {
+      		scale = maxcanvasheight/height;
+      	}
+      		console.log('width>>'+width+' height>>'+height+' scale>> '+scale);
+      	
+      	return (Math.round(scale*10)/10)
+      }
+      function oldgetScale(width, height) {
       	
   		overscale = false;
   		var rawupscale;
@@ -1165,79 +1267,96 @@ function cloneCanvas(oldCanvas) {
       }
       
       function setBackgroundSize(bgWidth, bgHeight) {
+      	    if (bgWidth == 0) {
+      	    	bgWidth = $("#background").width();
+      	    }
+      	    if (bgHeight == 0) {
+      	    	bgHeight = $("#background").height();
+      	    }
       	    var newScale;
       	    newScale = getScale(bgWidth, bgHeight);
-	  	    setBackgroundWidth (bgWidth*newScale);
-	        setBackgroundHeight (bgHeight*newScale);
+console.log('new scale >> '+newScale);
+	  setBackgroundWidth (bgWidth,newScale);
+	  setBackgroundHeight (bgHeight,newScale);
+	        
+      	    buildGrids(10*newScale, 100*newScale,'gridlines');
+      	    $('#BannerSize').find('.value').text(bgWidth+measurement+'(W) x '+bgHeight+measurement+'(H)');
+      	    $('#background').attr('scale-ratio',newScale);
+      	    performScale(newScale);
+	        
       }
                   
       function setBannerSize (size) {
       	var newScale;
+      	var oldscale = getScale(0,0);
         var currentscale = upscale;
         smallbannerscale = 10;
         switch (size) {
           case "3x1.8":
-            setBackgroundSize (3000,1800);
+            setBackgroundSize (300,180);
             $('#customsize').slideUp('fast', function() {});
           break;
           case "4x2.3":
-          	setBackgroundSize (4000,2300);
+          	setBackgroundSize (400,230);
             $('#customsize').slideUp('fast', function() {});
           break;
           case "6x2.8":
-          	setBackgroundSize (6000,2800);
+          	setBackgroundSize (600,280);
             $('#customsize').slideUp('fast', function() {});
           break;
 
           case "0.42x0.3":
-          	setBackgroundSize (295,420);
+          	setBackgroundSize (29.5,42.0);
             $('#customsize').slideUp('fast', function() {});
           break;
           case "0.3x0.42":
-          	setBackgroundSize (420,295);
+          	setBackgroundSize (42.0,29.5);
             $('#customsize').slideUp('fast', function() {});
           break;
           case "0.63x0.51":
-          	setBackgroundSize (510,630);
+          	setBackgroundSize (63.0,51.0);
             $('#customsize').slideUp('fast', function() {});
           break;
           case "0.51x0.63":
-          	setBackgroundSize (630,510);
+          	setBackgroundSize (51.0,63.0);
             $('#customsize').slideUp('fast', function() {});
           break;
           
            case "0.77x0.50":
-          	setBackgroundSize (770,500);
+          	setBackgroundSize (77.0,50.0);
             $('#customsize').slideUp('fast', function() {});
           break;
            case "0.50x0.77":
-          	setBackgroundSize (500,770);
+          	setBackgroundSize (50.0,77.0);
             $('#customsize').slideUp('fast', function() {});
           break;
 
          case "custom":
             $('#customsize').slideDown('fast', function() {});
-            
-            if (($( "#width-slider" ).slider("value") < 1000) || ($( "#height-slider" ).slider("value") < 1000)) {
+            /*
+            if (($( "#width-slider" ).slider("value") <= 600) || ($( "#height-slider" ).slider("value") <= 150)) {
               upscale = getScale($( "#width-slider" ).slider("value"),$( "#height-slider" ).slider("value"));
             }
             else {
               upscale = getScale($( "#width-slider" ).slider("value"),$( "#height-slider" ).slider("value"));
             }
-            setBackgroundWidth($( "#width-slider" ).slider("value")*upscale);
-            setBackgroundHeight($( "#height-slider" ).slider("value")*upscale);
+            */
+           console.log('size selected - width >> '+$( "#width-slider" ).slider("value")+' height >> '+$( "#height-slider" ).slider("value"))
+            //setBackgroundSize ($( "#width-slider" ).slider("value"),$( "#height-slider" ).slider("value"))
+            //setBackgroundWidth($( "#width-slider" ).slider("value")*upscale);
+            //setBackgroundHeight($( "#height-slider" ).slider("value")*upscale);
           break;
         }
         
-        performScale (upscale);
-        
-        if (overscale == true) {
-        	buildGrids(10*(10*upscale), 100*(10*upscale),'gridlines');
-
+        /*
+        var newscale = getScale(0,0);
+        if (newscale > oldscale) {
+        	performScale (newscale - oldscale);
         }
-        else  {
-        	buildGrids(upscale*100, 100,'gridlines');
+        else {
+        	performScale (1+newscale + oldscale);
         }
+        */
       }
       
       
