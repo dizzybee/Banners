@@ -561,17 +561,21 @@ index.phpm
 	border: 0px;
 }
 
+#backgroundsettings {
+	width:100%;
+}
 .thirds {
-	width: 220px;
+	width: 30%;
 	float: left;
 	position: relative;
 	padding-right: 30px;
 }
 .halves {
 	width: 370px;
+	width: 40%;
 	float: left;
 	position: relative;
-	padding-right: 20px;
+	padding-right: 10px;
 }
 
 .ls_van_fit_ibanner {
@@ -642,13 +646,19 @@ index.phpm
 
 #generalsettings .options {
 background-color: rgba(200, 200, 200, 0.95);
-display: none;
+display:none;
 float: left;
 position: absolute;
 z-index: 20;
-border-radius: 12px;
-border: 1px solid gray;
+/*border-radius: 12px;*/
+border: 0px solid gray;
 padding: 10px 20px;
+width:100%;
+left:0px;
+}
+
+.overallOptions td:hover, .optinsHover {
+	background-color: lightgray;
 }
 
 .overallOptions {

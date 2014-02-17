@@ -40,10 +40,12 @@ $_SESSION['paperSizes'] = array( 0 => array( "Measure"=>'Metric', "Value"=>'11',
 
 <script>
 var testarr = [{key: 'key1', value: 'value1'}, {key: 'key2', value: 'value2'}];
-var paperSizes = [
+var paperSizes_large = [
 	{'Name': '3m (w) x 1.8 (h)', "Measure":'Metric', "Value":'3x1.8', "Type":'runthrough','Width':3000,'Height':1800,'Description':'Great choice for 1-2 people'},
 	{'Name': '4m (w) x 2.3 (h)', "Measure":'Metric', "Value":'4x2.3', "Type":'runthrough','Width':4000,'Height':2300,'Description':'Great choice for 1-2 people'},
 	{'Name': '6m (w) x 2.8 (h)', "Measure":'Metric', "Value":'6x2.8', "Type":'runthrough','Width':6000,'Height':2800,'Description':'Great choice for more than 2 people or a small team'},
+];
+var paperSizes_small = [
 	{'Name': 'A3 Portrait', "Measure":'Metric', "Value":'0.42x0.3', "Type":'handheld','Width':420,'Height':300,'Description':''},
 	{'Name': 'A3 Landscape', "Measure":'Metric', "Value":'0.3x0.42', "Type":'handheld','Width':300,'Height':420,'Description':''},
 	{'Name': '510mm (w) x 630mm (h)', "Measure":'Metric', "Value":'0.51x0.63', "Type":'handheld','Width':510,'Height':630,'Description':''},
@@ -51,15 +53,29 @@ var paperSizes = [
 ];
 	function createPaperSelections() {
 		var paper = '';
-		paper += '<h4>Run-through Banners</h4><div class="thirds">';
-		for (var runthrough=0;runthrough<paperSizes.length;runthrough++) {							
+		paper += '<div class="thirds"><h4>Run-through Banners</h4>';
+		for (var runthrough=0;runthrough<paperSizes_large.length;runthrough++) {							
 									
-			if (paperSizes[runthrough]["Description"] !='') {
-				paper += '<span data-tooltip class="has-tip" title="'+paperSizes[runthrough]["Description"]+'">';
+			if (paperSizes_large[runthrough]["Description"] !='') {
+				paper += '<span data-tooltip class="has-tip" title="'+paperSizes_large[runthrough]["Description"]+'">';
 			}
-			paper += '<input type="radio" class="'+paperSizes[runthrough]["Type"]+'" name="bannersize" value="'+paperSizes[runthrough]['Value']+'" >';
-			paper +=  paperSizes[runthrough]['Name'];
-			if (paperSizes[runthrough]["Description"] !='') {
+			paper += '<input type="radio" class="'+paperSizes_large[runthrough]["Type"]+'" name="bannersize" value="'+paperSizes_large[runthrough]['Value']+'" >';
+			paper +=  paperSizes_large[runthrough]['Name'];
+			if (paperSizes_large[runthrough]["Description"] !='') {
+				paper += '</span>';
+			}
+			paper += '<br/>';
+		}
+		paper += '</div>';
+		paper += '<div class="thirds"><h4>Poster</h4>';
+		for (var runthrough=0;runthrough<paperSizes_small.length;runthrough++) {							
+									
+			if (paperSizes_small[runthrough]["Description"] !='') {
+				paper += '<span data-tooltip class="has-tip" title="'+paperSizes_small[runthrough]["Description"]+'">';
+			}
+			paper += '<input type="radio" class="'+paperSizes_small[runthrough]["Type"]+'" name="bannersize" value="'+paperSizes_small[runthrough]['Value']+'" >';
+			paper +=  paperSizes_small[runthrough]['Name'];
+			if (paperSizes_small[runthrough]["Description"] !='') {
 				paper += '</span>';
 			}
 			paper += '<br/>';
@@ -391,12 +407,27 @@ var paperSizes = [
 
 		//});
 		
-	$('.generalOptions').mouseleave(function(){
-		$(this).find('.options').css('display','none');
+	$('.generalOptions').parent().mouseleave(function(){
+		$(this).find('.options').slideUp('fast');
+		$(this).parentsUntil('table').find('th').removeClass('optionsHover');
 	});
+	
 	$('.edit').on ("click mouseover", function(){
-		$(this).parent().next('.options').css('display','inline');
-		$(this).parent().next('.options').click(function() {
+		//$(this).parent().parent().parent().addClass('optionsHover');
+		//var pos = $(this).parent().parent().parent().index()+1;
+		//console.log('pos>> '+pos);
+		//$(this).parentsUntil('table').find('th:nth-child('+pos+')').css('background-color','gray');
+		var parentpos = $("#generalsettings").position();
+		var editpos = $(this).position();
+		var optionsbox = $(this).parent().next('.options');
+		var optionsheight = parseInt($(optionsbox).height());
+		var parentsheight = parseInt($("#generalsettings").height());
+		console.log('parentstop >> '+parentpos.top+' height >> '+parentsheight);
+		//$(optionsbox).css('display','inline');
+		$(optionsbox).css('top', parentpos.top-parentsheight-optionsheight-15+'px');
+		$(optionsbox).show("slide", {"direction": "down"});
+		//$(optionsbox).css('right', editpos.left);
+		$(optionsbox).click(function() {
 			//$(this).css('display','none');
 		});
 	});
@@ -431,8 +462,7 @@ var paperSizes = [
 	<div id="generalsettings">
 
                 <table class="overallOptions">
-                	<th>Guidelines</th><th>Page(s)/Letter</th><th>Banner Dimensions</th><th>Background Style and Colour</th><th>Print</th>
-                	<tr  class="generalOptions">
+                	<tr  class="jgeneralOptions">
                 		<td>
 					<input id="gridson" type="checkbox" name="gridson" value="Yes" checked>Show
         				<!--
@@ -478,19 +508,21 @@ var paperSizes = [
 						<div class="current"><span class="value"></span><span class="edit">Edit</span></div>
 						<div class="options">
 							<div id="backgroundsettings">
-									<h4>Custom Size</h4>
-									<input type="radio" class="runthrough"  name="bannersize" value="custom">
-									Custom Size
-	
-									<div id="customsize" style="display:none;">
-										<label for="width-amount">Width:</label>
-										<input type="text" id="width-amount" style="border:0; color:#f6931f; font-weight:bold;" />
-	
-										<div id="width-slider"></div>
-										<br/>
-										<label for="height-amount">Height:</label>
-										<input type="text" id="height-amount" style="border:0; color:#f6931f; font-weight:bold;" />
-										<div id="height-slider"></div>
+								        <div class="thirds">
+										<h4>Custom Size</h4>
+										<input type="radio" class="runthrough"  name="bannersize" value="custom">
+										Custom Size
+		
+										<div id="customsize" style="display:none;">
+											<label for="width-amount">Width:</label>
+											<input type="text" id="width-amount" style="border:0; color:#f6931f; font-weight:bold;" />
+		
+											<div id="width-slider"></div>
+											<br/>
+											<label for="height-amount">Height:</label>
+											<input type="text" id="height-amount" style="border:0; color:#f6931f; font-weight:bold;" />
+											<div id="height-slider"></div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -593,6 +625,7 @@ var paperSizes = [
 					</div>
                 		</td>
                 	</tr>
+                	<th>Guidelines</th><th>Page(s)/Letter</th><th>Banner Dimensions</th><th>Background Style and Colour</th><th>Print</th>
                 </table>
 <div class-"settingsTabs">
 

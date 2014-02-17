@@ -19,9 +19,8 @@
     /* Image scaling */
     var imagescale = 1;
     var imageprintscale = 3;
-    var maximagewidth = 190;
-    maximagewidth = 50;
-    var maximageheight = 50;
+    var maximagewidth = 18;
+    var maximageheight = 25;
     /* font sizing variables */
     var a4portraitwidth = 210;
     var a4portraitheight = 297;
@@ -69,29 +68,37 @@
     {  
     
       if ($('#printImages').is(':checked')) {
-      	      var portraitwidth=216;
-      	      var portraitheight = 1200;
+      	      var portraitwidth=1000;
+      	      var portraitheight = 1400;
+      	      var imgheight;
+      	      var bg_scale = $('#background').attr('scale-ratio');
 	      var windowContent = '<!DOCTYPE html>';
 	      windowContent += '<html>';
 	      windowContent += '<head>';
 	      windowContent += '<style>div{float:left;position:relative;page-break-before: always}';
-	      windowContent += '.rotate{float:left;position:relative;transform:rotateZ(90deg);-ms-transform:rotateZ(90deg); /* IE 9 */-webkit-transform:rotateZ(90deg); /* Safari and Chrome */}</style>';
+	      //windowContent += '.rotate{float:left;position:relative;transform:rotateZ(90deg);-ms-transform:rotateZ(90deg); /* IE 9 */-webkit-transform:rotateZ(90deg); /* Safari and Chrome */}</style>';
+	      windowContent += '.rotate{float:left;position:relative;transform:rotateZ(90deg) translate(215px,53px);-ms-transform:rotateZ(90deg) translate(215px,53px); /* IE 9 */-webkit-transform:rotateZ(90deg) translate(215px,53px); /* Safari and Chrome */}</style>';
 	      windowContent += '<title>Print canvas</title><script>img {page-break-after:always;}</script></head>';
 	      windowContent += '<body>';
-	      
-	      var prevheight = 0;
+	      var imageprintscale = 65;
+	      var prevheight = 50;
 	      $("#images-logos canvas").each(function() {
 	        this_id = $(this).attr('id');
+	        imgheight = parseInt($(this).css('height'))/bg_scale*imageprintscale;
+	        imgwidth = parseInt($(this).css('width'))/bg_scale*imageprintscale;
+	        console.log('bgscale >> '+bg_scale);
+	        console.log('css height >> '+$(this).css('height'));
+	        console.log('imageprintscale >> '+imageprintscale);
+	        console.log('IMGAGE height >> '+imgheight);
 	        var dataUrl = $(this).parent().attr('filename');
-	        if ($(this).width()*imageprintscale > portraitwidth) {
+	        if (imgwidth > portraitwidth) {
 	        	var divspacer = prevheight;
-	        	var divheight = parseInt($(this).height()*imageprintscale/upscale) + divspacer;
-	        	windowContent += '<div class="jrotate"  style="height:' + divheight + 'px;" ><img style="top:'+divspacer+'px;" class="rotate" height="' + $(this).height()*imageprintscale/upscale + 'px" src="' + dataUrl + '" /></div>';
-	          alert($(this).width()*imageprintscale);
+	        	var divheight = imgheight + divspacer;
+	        	windowContent += '<div class="jrotate"  style="height:' + divheight + 'px;" ><img style="top:'+divspacer+'px;" class="rotate" height="' + imgheight + 'px" src="' + dataUrl + '" /></div>';
 	        //prevheight = 0;
 	        }
 	        else {
-	        	windowContent += '<div><img height="' + $(this).height()*imageprintscale/upscale + 'px" src="' + dataUrl + '" /></div>';
+	        	windowContent += '<div><img height="' + imgheight + 'px" src="' + dataUrl + '" /></div>';
 	        //prevheight = parseInt($(this).height()*imageprintscale/upscale);
 
 	        }
@@ -544,10 +551,11 @@ function cloneCanvas(oldCanvas) {
 
     }
     
-    function setImageSettings(imgwidth, imgheight, actualwidth, actualheight, this_id) {
-    	console.log('this id >> '+this_id);
+    function setImageSettings(width, height, actualwidth, actualheight, this_id) {
+      	var bg_scale = $('#background').attr('scale-ratio');
+      	var imgwidth = width*bg_scale;
+      	var imgheight = height*bg_scale;
     	var canvasID = $('#'+this_id).find('canvas').attr('id');
-    	console.log ('canvas id >>'+canvasID);
     	var canvas = document.getElementById(canvasID);
       	canvas.height = imgheight;
       	canvas.width = imgwidth;
@@ -574,8 +582,9 @@ function cloneCanvas(oldCanvas) {
       var context = canvas.getContext("2d");
       var imageObj = new Image();
       imageObj.src = logo;
+      
+      
 	if (imageObj.width < imageObj.height) {
-	      $('#image_'+this_id).resizable ({aspectRatio: true, autohide: true, maxHeight: maximageheight});
 	      if (imageObj.height >= maximageheight) {
 	      	scaledown = maximageheight/imageObj.height;
 	      	console.log ('height greater than max height.  Scaledown >> '+scaledown);
@@ -583,16 +592,14 @@ function cloneCanvas(oldCanvas) {
 	      	imgwidth = imageObj.width*scaledown;
       		}
       	      else {
-      	      	console.log('here');
       	      	imgwidth = imageObj.width;
       		imgheight = imageObj.height;
 
       	      	}
+	      $('#image_'+this_id).resizable ({aspectRatio: true, autohide: true, maxHeight: imgheight*bg_scale});
 	}
 	else {
-	      $('#image_'+this_id).resizable ({aspectRatio: true, autohide: true, maxWidth: maximagewidth});
 	      if (imageObj.width >= maximagewidth) {
-	      	console.log ('width greater than max width');
 	      	scaledown = maximagewidth/imageObj.width;
 	      	console.log ('width greater than max width.  Scaledown >> '+scaledown);
 	      	imgwidth = maximagewidth;
@@ -602,56 +609,46 @@ function cloneCanvas(oldCanvas) {
       		imgwidth = imageObj.width;
       		imgheight = imageObj.height;
       		}
+	      $('#image_'+this_id).resizable ({aspectRatio: true, autohide: true, maxWidth: imgwidth*bg_scale});
 	}
 	
-      	imageObj.onload = function() {
-        	context.drawImage(imageObj, 0, 0, imgwidth, imgheight);
-      	};
       	
-      	setImageSettings (imgwidth, imgheight, imageObj.width, imageObj.height, 'image_'+this_id);
+      	setImageSettings (imgwidth, imgheight, imgwidth, imgheight, 'image_'+this_id);
+      	imageObj.onload = function() {
+        	context.drawImage(imageObj, 0, 0, imgwidth*bg_scale, imgheight*bg_scale);
+      	};
     }
       
       function scaleImage (widget) {
-      	var bg_scale = $('#background').attr('scale-ratio')/10;
-      	//var current_width = parseInt($(widget).css('width'));
-      	//var current_height = parseInt($(widget).css('height'));
-      	var current_width = $(widget).attr('actual-width');
-      	var current_height = $(widget).attr('actual-height');
-      	var imgwidth = current_width * bg_scale;
-      	var imgheight = current_height * bg_scale;
-      	var actualwidth = imgwidth;
-      	var actualheight = imgheight;
+      	var bg_scale = $('#background').attr('scale-ratio');
+      	var current_width = parseInt($(widget).css('width'));
+      	var current_height = parseInt($(widget).css('height'));
+      	var actual_width = $(widget).attr('actual-width');
+      	var actual_height = $(widget).attr('actual-height');
+      	//var imgwidth = current_width * bg_scale;
+      	//var imgheight = current_height * bg_scale;
+      	//var actualwidth = imgwidth;
+      	//var actualheight = imgheight;
       	
       	var this_id = $(widget).attr('id');
-      	console.log('this id >> '+this_id);
-      	setImageSettings (imgwidth, imgheight, current_width, current_height, this_id);
+      	setImageSettings (actual_width, actual_height, actual_width, actual_height, this_id);
       	
-	      var canvas = document.getElementById($('#'+this_id).find('canvas').attr('id'));
-      	console.log('1');
-       var context = canvas.getContext("2d");
-      var imageObj = new Image();
-      imageObj.src = $(widget).attr('filename');
+	var canvas = document.getElementById($('#'+this_id).find('canvas').attr('id'));
+        var context = canvas.getContext("2d");
+        var imageObj = new Image();
+        imageObj.src = $(widget).attr('filename');
       	imageObj.onload = function() {
-        	context.drawImage(imageObj, 0, 0, imgwidth, imgheight);
+        	context.drawImage(imageObj, 0, 0, actual_width*bg_scale, actual_height*bg_scale);
       	};
-      	console.log('12');
      	
-      	/*
-      	var new_width = current_width * bg_scale;
-      	var new_height = current_height * bg_scale;
-	$(widget).css('width',new_width);
-	$(widget).css('height',new_height);
-	$(widget).find('canvas').css('width',new_width);
-	$(widget).find('canvas').css('height',new_height);
-	*/
-	
-	//$(widget).attr('actual-width',parseInt($(widget).css('width'))*(bg_scale/10));
-	//$(widget).attr('actual-height',parseInt($(widget).css('height'))*(bg_scale/10));
-	if ($('#image_'+this_id).width() < $('#image_'+this_id).height()) {
-	      $('#image_'+this_id).resizable ({aspectRatio: true, autohide: true, maxHeight: maximageheight/bg_scale});
+     	console.log ('this_id >> '+this_id);
+	if (current_width < current_height) {
+		console.log('width less than height');
+	      $('#'+this_id).resizable ({aspectRatio: true, autohide: true, maxHeight: actual_height*(bg_scale)});
 	}
 	else {
-	      $('#image_'+this_id).resizable ({aspectRatio: true, autohide: true, maxWidth: maximagewidth/bg_scale});
+		console.log('height less than width');
+	      $('#'+this_id).resizable ({aspectRatio: true, autohide: true, maxWidth: actual_width*(bg_scale)});
 	}
       	
       }
@@ -690,8 +687,8 @@ function cloneCanvas(oldCanvas) {
           $(this).find('.ui-icon').css('display','none');
         });
       
+      
       $("#images-logos div.logo").resize (function() {
-      	console.log('resizing>>');
       	var bg_scale = $('#background').attr('scale-ratio');
 	      var canvas = document.getElementById($(this).find('canvas').attr('id'));
 	      var imgfname = $(this).attr('filename');
